@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.5-10.4.11-MariaDB)
 # Database: todo
-# Generation Time: 2020-06-19 07:32:13 +0000
+# Generation Time: 2020-06-19 14:41:25 +0000
 # ************************************************************
 
 
@@ -40,10 +40,10 @@ UNLOCK TABLES;
 LOCK TABLES `tasks` WRITE;
 /*!40000 ALTER TABLE `tasks` DISABLE KEYS */;
 
-INSERT INTO `tasks` (`id`, `uuid`, `user_id`, `name`, `status`, `deadline`, `created_at`, `updated_at`, `deleted_at`)
+INSERT INTO `tasks` (`id`, `uuid`, `user_id`, `name`, `description`, `status`, `deadline`, `created_at`, `updated_at`, `deleted_at`, `list_id`)
 VALUES
-	(1,'50fe094d-9f9d-46c6-904d-bda872648540',1,'Test Task Name','active','2020-06-19 10:30:29','2020-06-19 10:30:29','2020-06-19 10:30:29',NULL),
-	(2,'d27bd3d4-5c10-4561-8927-04d1068b3fa8',1,'Test Task Name 2','active','2020-06-19 10:30:29','2020-06-19 10:30:29','2020-06-19 10:30:29',NULL);
+	(1,'50fe094d-9f9d-46c6-904d-bda872648540',1,'Test Task Name',NULL,'active','2020-06-19 10:30:29','2020-06-19 10:30:29','2020-06-19 10:30:29',NULL,1),
+	(2,'d27bd3d4-5c10-4561-8927-04d1068b3fa8',1,'Test Task Name 2',NULL,'active','2020-06-19 10:30:29','2020-06-19 10:30:29','2020-06-19 10:30:29',NULL,1);
 
 /*!40000 ALTER TABLE `tasks` ENABLE KEYS */;
 UNLOCK TABLES;
