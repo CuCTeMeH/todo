@@ -7,10 +7,11 @@ message UserRequest {
 }
 
 message UserResponse {
-  string id = 1;
+  string ID = 1;
   string email = 2;
-  string firstName = 3;
-  string lastName = 4;
+  string username = 3;
+  string firstName = 4;
+  string lastName = 5;
 }
 
 //User By Email

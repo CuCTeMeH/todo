@@ -16,8 +16,6 @@ func (s *Server) GetListByID(ctx context.Context, in *proto.ListRequest) (*proto
 		return nil, err
 	}
 
-	//Get the tasks for the list and pass the to the response maker.
-	//taskService :=
 	resp, err := listService.ListingResponseFromModel(list)
 	if err != nil {
 		return nil, err

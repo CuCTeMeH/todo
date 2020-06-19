@@ -8,6 +8,7 @@ import (
 	"todo/model"
 	"todo/proto"
 	"todo/task"
+	"todo/user"
 )
 
 func main() {
@@ -20,8 +21,10 @@ func main() {
 	grpcServer := grpc.NewServer()
 	l := list.Server{}
 	t := task.Server{}
+	u := user.Server{}
 	proto.RegisterListServiceServer(grpcServer, &l)
 	proto.RegisterTaskServiceServer(grpcServer, &t)
+	proto.RegisterUserServicesServer(grpcServer, &u)
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %s", err)
