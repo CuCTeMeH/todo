@@ -18,7 +18,7 @@ func (s *Server) GetListByID(ctx context.Context, in *proto.ListRequest) (*proto
 
 	//Get the tasks for the list and pass the to the response maker.
 	//taskService :=
-	resp, err := listService.ListingResponseFromModel(list, nil)
+	resp, err := listService.ListingResponseFromModel(list)
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +36,7 @@ func (s *Server) GetListsForUser(ctx context.Context, in *proto.UserListsRequest
 
 	resp := []*proto.ListResponse{}
 	for _, list := range lists {
-		l, err := listService.ListingResponseFromModel(list, nil)
+		l, err := listService.ListingResponseFromModel(list)
 		if err != nil {
 			return nil, err
 		}

@@ -5,11 +5,11 @@ import (
 	"github.com/jinzhu/gorm"
 	"todo/model"
 	"todo/proto"
-	u "todo/user"
+	taskService "todo/task"
 )
 
 type ServiceI interface {
-	ListingResponseFromModel(list *model.List, tasks []*model.Task) (*proto.ListResponse, error)
+	ListingResponseFromModel(list *model.List) (*proto.ListResponse, error)
 	GetListByID(listID string) (*model.List, error)
 	GetListsForUser(userID string) ([]*model.List, error)
 }
@@ -21,16 +21,29 @@ func NewListService() ServiceI {
 type Service struct {
 }
 
-func (s Service) ListingResponseFromModel(list *model.List, tasks []*model.Task) (*proto.ListResponse, error) {
-	user := &u.User{}
+func (s Service) ListingResponseFromModel(list *model.List) (*proto.ListResponse, error) {
+	user := &model.User{}
 	err := model.Client().Model(user).Where("id = ?", list.UserID).First(&user).Error
+
+	tasks := []*model.Task{}
+	err = model.Client().Model(tasks).Where("list_id = ?", list.ID).Find(&tasks).Error
+
+	taskResp := []*proto.TaskResponse{}
+	for _, task := range tasks {
+		t, err := taskService.NewTaskService().TaskResponseFromModel(task)
+		if err != nil {
+			return nil, err
+		}
+
+		taskResp = append(taskResp, t)
+	}
 
 	resp := &proto.ListResponse{
 		ID:     list.UUID,
 		Name:   list.Name,
 		Status: list.Status,
 		UserID: user.UUID,
-		Tasks:  nil,
+		Tasks:  taskResp,
 	}
 
 	return resp, err
@@ -50,7 +63,7 @@ func (s Service) GetListByID(listID string) (*model.List, error) {
 }
 
 func (s Service) GetListsForUser(userID string) ([]*model.List, error) {
-	user := &u.User{}
+	user := &model.User{}
 	err := model.Client().Model(user).Where("uuid = ?", userID).First(&user).Error
 	if err != nil {
 		return nil, err

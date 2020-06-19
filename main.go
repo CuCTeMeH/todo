@@ -8,7 +8,6 @@ import (
 	"todo/model"
 	"todo/proto"
 	"todo/task"
-	"todo/user"
 )
 
 func main() {
@@ -30,5 +29,5 @@ func main() {
 }
 
 func AutoMigrate() {
-	model.Client().AutoMigrate(&user.User{}, &model.List{}, &model.Task{})
+	model.Client().AutoMigrate(&model.User{}, &model.List{}, &model.Task{})
 }

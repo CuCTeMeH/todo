@@ -5,7 +5,6 @@ import (
 	"github.com/jinzhu/gorm"
 	"todo/model"
 	"todo/proto"
-	u "todo/user"
 )
 
 type ServiceI interface {
@@ -23,7 +22,7 @@ type Service struct {
 }
 
 func (s Service) TaskResponseFromModel(task *model.Task) (*proto.TaskResponse, error) {
-	user := &u.User{}
+	user := &model.User{}
 	err := model.Client().Model(user).Where("id = ?", task.UserID).First(&user).Error
 	if err != nil {
 		return nil, err
@@ -61,7 +60,7 @@ func (s Service) GetTaskByID(taskID string) (*model.Task, error) {
 }
 
 func (s Service) GetTasksForUser(userID string) ([]*model.Task, error) {
-	user := &u.User{}
+	user := &model.User{}
 	err := model.Client().Model(user).Where("uuid = ?", userID).First(&user).Error
 	if err != nil {
 		return nil, err

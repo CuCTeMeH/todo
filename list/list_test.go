@@ -10,7 +10,6 @@ import (
 	"net"
 	"todo/model"
 	"todo/proto"
-	u "todo/user"
 )
 
 const bufSize = 1024 * 1024
@@ -60,7 +59,7 @@ var _ = Describe("Lists methods", func() {
 		defer conn.Close()
 		client := proto.NewListServiceClient(conn)
 
-		user := &u.User{}
+		user := &model.User{}
 		err = model.Client().Model(user).First(&user).Error
 
 		q := model.Client().Model(&model.List{}).Where("user_id = ?", user.ID)
