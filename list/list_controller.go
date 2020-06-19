@@ -60,3 +60,19 @@ func (s *Server) NewListForUser(ctx context.Context, in *proto.NewListRequest) (
 
 	return resp, nil
 }
+
+func (s *Server) EditList(ctx context.Context, in *proto.EditListRequest) (*proto.ListResponse, error) {
+	listService := NewListService()
+
+	list, err := listService.EditList(in.ListID, in.UserID, in.Name, in.Status)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := listService.ListingResponseFromModel(list)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}

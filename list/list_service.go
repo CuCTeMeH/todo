@@ -13,6 +13,7 @@ type ServiceI interface {
 	GetListByID(listID string) (*model.List, error)
 	GetListsForUser(userID string) ([]*model.List, error)
 	NewListForUser(userID string, name string, status string) (*model.List, error)
+	EditList(listID string, userID string, name string, status string) (*model.List, error)
 }
 
 func NewListService() ServiceI {
@@ -108,6 +109,27 @@ func (s Service) NewListForUser(userID string, name string, status string) (*mod
 	if err != nil {
 		return nil, err
 	}
+
+	return list, nil
+}
+
+func (s Service) EditList(listID string, userID string, name string, status string) (*model.List, error) {
+	user := &model.User{}
+	err := model.Client().Model(user).Where("uuid = ?", userID).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+
+	list := &model.List{}
+	err = model.Client().Model(list).Where("uuid = ?", listID).Where("user_id = ?", user.ID).First(&list).Error
+	if err != nil {
+		return nil, err
+	}
+
+	list.Name = name
+	list.Status = status
+
+	model.Client().Save(&list)
 
 	return list, nil
 }
