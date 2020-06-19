@@ -1,0 +1,24 @@
+syntax = "proto3";
+package proto;
+
+//User By ID
+message UserRequest {
+  string userID = 1;
+}
+
+message UserResponse {
+  string id = 1;
+  string email = 2;
+  string firstName = 3;
+  string lastName = 4;
+}
+
+//User By Email
+message UserByEmailRequest {
+  string email = 1;
+}
+
+service userServices {
+  rpc GetUserByID(UserRequest) returns (UserResponse) {}
+  rpc GetUserByEmail(UserByEmailRequest) returns (UserResponse) {}
+}

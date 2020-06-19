@@ -1,0 +1,40 @@
+syntax = "proto3";
+package proto;
+
+//Task
+message TaskRequest {
+  string uuid = 1;
+}
+
+message TaskResponse {
+  string ID = 1;
+  string name = 2;
+  string description = 3;
+  string status = 4;
+  string userID = 5;
+  int64 deadline = 6;
+}
+
+//User Tasks
+message UserTasksRequest {
+  string userID = 1;
+}
+
+message UserTasksResponse {
+  repeated TaskResponse tasks = 1;
+}
+
+//List Tasks
+message ListTasksRequest {
+  string listID = 1;
+}
+
+message ListTasksResponse {
+  repeated TaskResponse tasks = 1;
+}
+
+service taskService {
+  rpc GetTaskByID(TaskRequest) returns (TaskResponse) {}
+  rpc GetTasksForUser(UserTasksRequest) returns (UserTasksResponse) {}
+  rpc GetTasksForList(ListTasksRequest) returns (ListTasksResponse) {}
+}

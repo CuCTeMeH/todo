@@ -1,0 +1,31 @@
+syntax = "proto3";
+package proto;
+import "task.proto";
+
+//List
+message ListRequest {
+  string listID = 1;
+}
+
+message ListResponse {
+  string ID = 1;
+  string name = 2;
+  string status = 3;
+  string userID = 4;
+  repeated TaskResponse tasks = 5;
+}
+
+//User Lists
+message UserListsRequest {
+  string userID = 1;
+}
+
+message UserListsResponse {
+  repeated ListResponse lists = 1;
+  int32 count = 2;
+}
+
+service listService {
+  rpc GetListByID(ListRequest) returns (ListResponse) {}
+  rpc GetListsForUser(UserListsRequest) returns (UserListsResponse) {}
+}
