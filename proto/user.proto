@@ -19,7 +19,22 @@ message UserByEmailRequest {
   string email = 1;
 }
 
+//Create User Request
+message NewUserRequest {
+  string username = 1;
+  string email = 2;
+  string firstName = 3;
+  string lastName = 4;
+}
+
+message EditUserRequest {
+  string userID = 1;
+  NewUserRequest user = 2;
+}
+
 service userServices {
   rpc GetUserByID(UserRequest) returns (UserResponse) {}
   rpc GetUserByEmail(UserByEmailRequest) returns (UserResponse) {}
+  rpc NewUser(NewUserRequest) returns (UserResponse) {}
+  rpc EditUser(EditUserRequest) returns (UserResponse) {}
 }

@@ -67,4 +67,47 @@ var _ = Describe("Task methods", func() {
 		Expect(err).To(BeNil())
 		Expect(resp.Email).To(BeEquivalentTo(user.Email))
 	})
+
+	It("Create User", func() {
+		ctx := context.Background()
+		conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(BufferDialer), grpc.WithInsecure())
+		defer conn.Close()
+		client := proto.NewUserServicesClient(conn)
+
+		user := &model.User{}
+		err = model.Client().Model(user).First(&user).Error
+
+		l := &model.List{}
+		err = model.Client().Model(l).Where("user_id = ?", user.ID).First(&l).Error
+
+		resp, err := client.NewUser(ctx, &proto.NewUserRequest{Username: "test_username", Email: "test_email@email.com", FirstName: "Test First Name", LastName: "Test Last Name"})
+
+		Expect(resp.Username).To(BeEquivalentTo("test_username"))
+		Expect(resp.Email).To(BeEquivalentTo("test_email@email.com"))
+		Expect(resp.FirstName).To(BeEquivalentTo("Test First Name"))
+		Expect(resp.LastName).To(BeEquivalentTo("Test Last Name"))
+
+		//delete from db after test
+		err = model.Client().Model(&model.User{}).Where("uuid = ?", resp.ID).Unscoped().Delete(&model.User{}).Error
+		Expect(err).To(BeNil())
+	})
+
+	It("Edit User", func() {
+		ctx := context.Background()
+		conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(BufferDialer), grpc.WithInsecure())
+		defer conn.Close()
+		client := proto.NewUserServicesClient(conn)
+
+		user := &model.User{}
+		err = model.Client().Model(user).First(&user).Error
+
+		resp, err := client.EditUser(ctx, &proto.EditUserRequest{UserID: user.UUID, User: &proto.NewUserRequest{Username: "edit_username", Email: "edit_test_email@gmail.com", FirstName: "Edit Test First Name", LastName: "Edit Test Last Name"}})
+
+		Expect(resp.ID).To(BeEquivalentTo(user.UUID))
+
+		//delete from db after test
+		resp, err = client.EditUser(ctx, &proto.EditUserRequest{UserID: user.UUID, User: &proto.NewUserRequest{Username: user.Username, Email: user.Email, FirstName: user.FirstName, LastName: user.LastName}})
+		Expect(err).To(BeNil())
+	})
+
 })

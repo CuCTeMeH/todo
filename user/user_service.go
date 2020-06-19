@@ -11,6 +11,8 @@ type ServiceI interface {
 	UserResponseFromModel(user *model.User) *proto.UserResponse
 	GetUserByID(userID string) (*model.User, error)
 	GetUserByEmail(email string) (*model.User, error)
+	NewUser(username string, email string, firstName string, lastName string) (*model.User, error)
+	EditUser(userID string, username string, email string, firstName string, lastName string) (*model.User, error)
 }
 
 func NewUserService() ServiceI {
@@ -56,4 +58,40 @@ func (s Service) GetUserByEmail(email string) (*model.User, error) {
 	}
 
 	return user, err
+}
+
+func (s Service) NewUser(username string, email string, firstName string, lastName string) (*model.User, error) {
+	uuid := model.UUID()
+
+	user := &model.User{
+		UUID:      uuid,
+		Username:  username,
+		Email:     email,
+		FirstName: firstName,
+		LastName:  lastName,
+	}
+
+	err := model.Client().Where(user).FirstOrCreate(&user).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func (s Service) EditUser(userID string, username string, email string, firstName string, lastName string) (*model.User, error) {
+	user := &model.User{}
+	err := model.Client().Model(user).Where("uuid = ?", userID).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+
+	user.Username = username
+	user.Email = email
+	user.FirstName = firstName
+	user.LastName = lastName
+
+	model.Client().Save(&user)
+	return user, nil
+
 }

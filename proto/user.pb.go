@@ -204,6 +204,133 @@ func (x *UserByEmailRequest) GetEmail() string {
 	return ""
 }
 
+//Create User Request
+type NewUserRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Username  string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	Email     string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
+	FirstName string `protobuf:"bytes,3,opt,name=firstName,proto3" json:"firstName,omitempty"`
+	LastName  string `protobuf:"bytes,4,opt,name=lastName,proto3" json:"lastName,omitempty"`
+}
+
+func (x *NewUserRequest) Reset() {
+	*x = NewUserRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_user_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *NewUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NewUserRequest) ProtoMessage() {}
+
+func (x *NewUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NewUserRequest.ProtoReflect.Descriptor instead.
+func (*NewUserRequest) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *NewUserRequest) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *NewUserRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *NewUserRequest) GetFirstName() string {
+	if x != nil {
+		return x.FirstName
+	}
+	return ""
+}
+
+func (x *NewUserRequest) GetLastName() string {
+	if x != nil {
+		return x.LastName
+	}
+	return ""
+}
+
+type EditUserRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UserID string          `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	User   *NewUserRequest `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
+}
+
+func (x *EditUserRequest) Reset() {
+	*x = EditUserRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_user_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *EditUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EditUserRequest) ProtoMessage() {}
+
+func (x *EditUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EditUserRequest.ProtoReflect.Descriptor instead.
+func (*EditUserRequest) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *EditUserRequest) GetUserID() string {
+	if x != nil {
+		return x.UserID
+	}
+	return ""
+}
+
+func (x *EditUserRequest) GetUser() *NewUserRequest {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
 var File_user_proto protoreflect.FileDescriptor
 
 var file_user_proto_rawDesc = []byte{
@@ -222,16 +349,37 @@ var file_user_proto_rawDesc = []byte{
 	0x61, 0x73, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x22, 0x2a, 0x0a, 0x12, 0x55, 0x73, 0x65, 0x72, 0x42,
 	0x79, 0x45, 0x6d, 0x61, 0x69, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x14, 0x0a,
 	0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x6d,
-	0x61, 0x69, 0x6c, 0x32, 0x8c, 0x01, 0x0a, 0x0c, 0x75, 0x73, 0x65, 0x72, 0x53, 0x65, 0x72, 0x76,
-	0x69, 0x63, 0x65, 0x73, 0x12, 0x38, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x42,
-	0x79, 0x49, 0x44, 0x12, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x55, 0x73, 0x65, 0x72,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x13, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e,
-	0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x42,
-	0x0a, 0x0e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x42, 0x79, 0x45, 0x6d, 0x61, 0x69, 0x6c,
-	0x12, 0x19, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x42, 0x79, 0x45,
-	0x6d, 0x61, 0x69, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x13, 0x2e, 0x70, 0x72,
+	0x61, 0x69, 0x6c, 0x22, 0x7c, 0x0a, 0x0e, 0x4e, 0x65, 0x77, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d,
+	0x65, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x12, 0x1c, 0x0a, 0x09, 0x66, 0x69, 0x72, 0x73, 0x74,
+	0x4e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x66, 0x69, 0x72, 0x73,
+	0x74, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x6c, 0x61, 0x73, 0x74, 0x4e, 0x61, 0x6d,
+	0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6c, 0x61, 0x73, 0x74, 0x4e, 0x61, 0x6d,
+	0x65, 0x22, 0x54, 0x0a, 0x0f, 0x45, 0x64, 0x69, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x44, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x44, 0x12, 0x29, 0x0a, 0x04,
+	0x75, 0x73, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x15, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x2e, 0x4e, 0x65, 0x77, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x52, 0x04, 0x75, 0x73, 0x65, 0x72, 0x32, 0x80, 0x02, 0x0a, 0x0c, 0x75, 0x73, 0x65, 0x72,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x12, 0x38, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x55,
+	0x73, 0x65, 0x72, 0x42, 0x79, 0x49, 0x44, 0x12, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e,
+	0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x13, 0x2e, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x22, 0x00, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x22, 0x00, 0x12, 0x42, 0x0a, 0x0e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x42, 0x79, 0x45,
+	0x6d, 0x61, 0x69, 0x6c, 0x12, 0x19, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x55, 0x73, 0x65,
+	0x72, 0x42, 0x79, 0x45, 0x6d, 0x61, 0x69, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x13, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x37, 0x0a, 0x07, 0x4e, 0x65, 0x77, 0x55, 0x73, 0x65,
+	0x72, 0x12, 0x15, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x4e, 0x65, 0x77, 0x55, 0x73, 0x65,
+	0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x13, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12,
+	0x39, 0x0a, 0x08, 0x45, 0x64, 0x69, 0x74, 0x55, 0x73, 0x65, 0x72, 0x12, 0x16, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x2e, 0x45, 0x64, 0x69, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x13, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x55, 0x73, 0x65, 0x72,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (
@@ -246,22 +394,29 @@ func file_user_proto_rawDescGZIP() []byte {
 	return file_user_proto_rawDescData
 }
 
-var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_user_proto_goTypes = []interface{}{
 	(*UserRequest)(nil),        // 0: proto.UserRequest
 	(*UserResponse)(nil),       // 1: proto.UserResponse
 	(*UserByEmailRequest)(nil), // 2: proto.UserByEmailRequest
+	(*NewUserRequest)(nil),     // 3: proto.NewUserRequest
+	(*EditUserRequest)(nil),    // 4: proto.EditUserRequest
 }
 var file_user_proto_depIdxs = []int32{
-	0, // 0: proto.userServices.GetUserByID:input_type -> proto.UserRequest
-	2, // 1: proto.userServices.GetUserByEmail:input_type -> proto.UserByEmailRequest
-	1, // 2: proto.userServices.GetUserByID:output_type -> proto.UserResponse
-	1, // 3: proto.userServices.GetUserByEmail:output_type -> proto.UserResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	3, // 0: proto.EditUserRequest.user:type_name -> proto.NewUserRequest
+	0, // 1: proto.userServices.GetUserByID:input_type -> proto.UserRequest
+	2, // 2: proto.userServices.GetUserByEmail:input_type -> proto.UserByEmailRequest
+	3, // 3: proto.userServices.NewUser:input_type -> proto.NewUserRequest
+	4, // 4: proto.userServices.EditUser:input_type -> proto.EditUserRequest
+	1, // 5: proto.userServices.GetUserByID:output_type -> proto.UserResponse
+	1, // 6: proto.userServices.GetUserByEmail:output_type -> proto.UserResponse
+	1, // 7: proto.userServices.NewUser:output_type -> proto.UserResponse
+	1, // 8: proto.userServices.EditUser:output_type -> proto.UserResponse
+	5, // [5:9] is the sub-list for method output_type
+	1, // [1:5] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_user_proto_init() }
@@ -306,6 +461,30 @@ func file_user_proto_init() {
 				return nil
 			}
 		}
+		file_user_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*NewUserRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_user_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*EditUserRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -313,7 +492,7 @@ func file_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_user_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -341,6 +520,8 @@ const _ = grpc.SupportPackageIsVersion6
 type UserServicesClient interface {
 	GetUserByID(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error)
 	GetUserByEmail(ctx context.Context, in *UserByEmailRequest, opts ...grpc.CallOption) (*UserResponse, error)
+	NewUser(ctx context.Context, in *NewUserRequest, opts ...grpc.CallOption) (*UserResponse, error)
+	EditUser(ctx context.Context, in *EditUserRequest, opts ...grpc.CallOption) (*UserResponse, error)
 }
 
 type userServicesClient struct {
@@ -369,10 +550,30 @@ func (c *userServicesClient) GetUserByEmail(ctx context.Context, in *UserByEmail
 	return out, nil
 }
 
+func (c *userServicesClient) NewUser(ctx context.Context, in *NewUserRequest, opts ...grpc.CallOption) (*UserResponse, error) {
+	out := new(UserResponse)
+	err := c.cc.Invoke(ctx, "/proto.userServices/NewUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServicesClient) EditUser(ctx context.Context, in *EditUserRequest, opts ...grpc.CallOption) (*UserResponse, error) {
+	out := new(UserResponse)
+	err := c.cc.Invoke(ctx, "/proto.userServices/EditUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServicesServer is the server API for UserServices service.
 type UserServicesServer interface {
 	GetUserByID(context.Context, *UserRequest) (*UserResponse, error)
 	GetUserByEmail(context.Context, *UserByEmailRequest) (*UserResponse, error)
+	NewUser(context.Context, *NewUserRequest) (*UserResponse, error)
+	EditUser(context.Context, *EditUserRequest) (*UserResponse, error)
 }
 
 // UnimplementedUserServicesServer can be embedded to have forward compatible implementations.
@@ -384,6 +585,12 @@ func (*UnimplementedUserServicesServer) GetUserByID(context.Context, *UserReques
 }
 func (*UnimplementedUserServicesServer) GetUserByEmail(context.Context, *UserByEmailRequest) (*UserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserByEmail not implemented")
+}
+func (*UnimplementedUserServicesServer) NewUser(context.Context, *NewUserRequest) (*UserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method NewUser not implemented")
+}
+func (*UnimplementedUserServicesServer) EditUser(context.Context, *EditUserRequest) (*UserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditUser not implemented")
 }
 
 func RegisterUserServicesServer(s *grpc.Server, srv UserServicesServer) {
@@ -426,6 +633,42 @@ func _UserServices_GetUserByEmail_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserServices_NewUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NewUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServicesServer).NewUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.userServices/NewUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServicesServer).NewUser(ctx, req.(*NewUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserServices_EditUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EditUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServicesServer).EditUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.userServices/EditUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServicesServer).EditUser(ctx, req.(*EditUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _UserServices_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "proto.userServices",
 	HandlerType: (*UserServicesServer)(nil),
@@ -437,6 +680,14 @@ var _UserServices_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserByEmail",
 			Handler:    _UserServices_GetUserByEmail_Handler,
+		},
+		{
+			MethodName: "NewUser",
+			Handler:    _UserServices_NewUser_Handler,
+		},
+		{
+			MethodName: "EditUser",
+			Handler:    _UserServices_EditUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
