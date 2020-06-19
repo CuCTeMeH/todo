@@ -89,6 +89,7 @@ var _ = Describe("Lists methods", func() {
 
 		resp, err := client.NewList(ctx, &proto.NewListRequest{UserID: user.UUID, Status: "active", Name: "Test Name"})
 
+		Expect(err).To(BeNil())
 		Expect(resp.UserID).To(BeEquivalentTo(user.UUID))
 
 		//delete from db after test
@@ -110,6 +111,7 @@ var _ = Describe("Lists methods", func() {
 
 		resp, err := client.EditList(ctx, &proto.EditListRequest{ListID: list.UUID, List: &proto.NewListRequest{UserID: user.UUID, Status: "disabled", Name: "Edit Name"}})
 
+		Expect(err).To(BeNil())
 		Expect(resp.UserID).To(BeEquivalentTo(user.UUID))
 		Expect(resp.Status).To(BeEquivalentTo("disabled"))
 		Expect(resp.Name).To(BeEquivalentTo("Edit Name"))

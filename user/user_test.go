@@ -82,6 +82,7 @@ var _ = Describe("Task methods", func() {
 
 		resp, err := client.NewUser(ctx, &proto.NewUserRequest{Username: "test_username", Email: "test_email@email.com", FirstName: "Test First Name", LastName: "Test Last Name"})
 
+		Expect(err).To(BeNil())
 		Expect(resp.Username).To(BeEquivalentTo("test_username"))
 		Expect(resp.Email).To(BeEquivalentTo("test_email@email.com"))
 		Expect(resp.FirstName).To(BeEquivalentTo("Test First Name"))
@@ -103,6 +104,7 @@ var _ = Describe("Task methods", func() {
 
 		resp, err := client.EditUser(ctx, &proto.EditUserRequest{UserID: user.UUID, User: &proto.NewUserRequest{Username: "edit_username", Email: "edit_test_email@gmail.com", FirstName: "Edit Test First Name", LastName: "Edit Test Last Name"}})
 
+		Expect(err).To(BeNil())
 		Expect(resp.ID).To(BeEquivalentTo(user.UUID))
 
 		//delete from db after test

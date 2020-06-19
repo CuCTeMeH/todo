@@ -117,6 +117,7 @@ var _ = Describe("Task methods", func() {
 
 		resp, err := client.NewTask(ctx, &proto.NewTaskRequest{ListID: l.UUID, UserID: user.UUID, Name: "New task", Description: "New Task Description", Status: "active", Deadline: time.Now().Unix()})
 
+		Expect(err).To(BeNil())
 		Expect(resp.UserID).To(BeEquivalentTo(user.UUID))
 
 		//delete from db after test
@@ -142,6 +143,7 @@ var _ = Describe("Task methods", func() {
 		now := time.Now().Unix()
 		resp, err := client.EditTask(ctx, &proto.EditTaskRequest{TaskID: task.UUID, Task: &proto.NewTaskRequest{ListID: l.UUID, UserID: user.UUID, Name: "Edit task", Description: "Edit Task Description", Status: "disabled", Deadline: now}})
 
+		Expect(err).To(BeNil())
 		Expect(resp.UserID).To(BeEquivalentTo(user.UUID))
 
 		//delete from db after test
