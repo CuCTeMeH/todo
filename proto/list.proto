@@ -25,7 +25,15 @@ message UserListsResponse {
   int32 count = 2;
 }
 
+//New List For User - , name string, status string
+message NewListRequest {
+  string userID = 1;
+  string name = 2;
+  string status = 3;
+}
+
 service listService {
   rpc GetListByID(ListRequest) returns (ListResponse) {}
   rpc GetListsForUser(UserListsRequest) returns (UserListsResponse) {}
+  rpc NewListForUser(NewListRequest) returns (ListResponse) {}
 }

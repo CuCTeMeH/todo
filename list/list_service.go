@@ -12,6 +12,7 @@ type ServiceI interface {
 	ListingResponseFromModel(list *model.List) (*proto.ListResponse, error)
 	GetListByID(listID string) (*model.List, error)
 	GetListsForUser(userID string) ([]*model.List, error)
+	NewListForUser(userID string, name string, status string) (*model.List, error)
 }
 
 func NewListService() ServiceI {
@@ -85,4 +86,28 @@ func (s Service) GetListsForUser(userID string) ([]*model.List, error) {
 	}
 
 	return lists, err
+}
+
+func (s Service) NewListForUser(userID string, name string, status string) (*model.List, error) {
+	uuid := model.UUID()
+
+	user := &model.User{}
+	err := model.Client().Model(user).Where("uuid = ?", userID).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+
+	list := &model.List{
+		UUID:   uuid,
+		UserID: user.ID,
+		Name:   name,
+		Status: status,
+	}
+
+	err = model.Client().Where(list).FirstOrCreate(&list).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return list, nil
 }

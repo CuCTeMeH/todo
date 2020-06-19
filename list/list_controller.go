@@ -44,3 +44,19 @@ func (s *Server) GetListsForUser(ctx context.Context, in *proto.UserListsRequest
 
 	return &proto.UserListsResponse{Lists: resp}, nil
 }
+
+func (s *Server) NewListForUser(ctx context.Context, in *proto.NewListRequest) (*proto.ListResponse, error) {
+	listService := NewListService()
+
+	list, err := listService.NewListForUser(in.UserID, in.Name, in.Status)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := listService.ListingResponseFromModel(list)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}

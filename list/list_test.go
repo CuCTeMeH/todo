@@ -77,4 +77,22 @@ var _ = Describe("Lists methods", func() {
 			Expect(v.UserID).To(BeEquivalentTo(user.UUID))
 		}
 	})
+
+	It("Create List For User", func() {
+		ctx := context.Background()
+		conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(BufferDialer), grpc.WithInsecure())
+		defer conn.Close()
+		client := proto.NewListServiceClient(conn)
+
+		user := &model.User{}
+		err = model.Client().Model(user).First(&user).Error
+
+		resp, err := client.NewListForUser(ctx, &proto.NewListRequest{UserID: user.UUID, Status: "active", Name: "Test Name"})
+
+		Expect(resp.UserID).To(BeEquivalentTo(user.UUID))
+
+		//delete from db after test
+		err = model.Client().Model(&model.List{}).Where("uuid = ?", resp.ID).Unscoped().Delete(&model.List{}).Error
+		Expect(err).To(BeNil())
+	})
 })
