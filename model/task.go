@@ -1,4 +1,4 @@
-package task
+package model
 
 import "time"
 
@@ -6,6 +6,7 @@ type Task struct {
 	ID          int        `gorm:"primary_key;column:id"`
 	UUID        string     `gorm:"column:uuid"`
 	UserID      int        `gorm:"column:user_id"`
+	ListID      int        `gorm:"column:list_id"`
 	Name        string     `gorm:"column:name"`
 	Description string     `gorm:"type:longtext;column:description"`
 	Status      string     `gorm:"column:status"`

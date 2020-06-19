@@ -3,7 +3,7 @@ package proto;
 
 //Task
 message TaskRequest {
-  string uuid = 1;
+  string taskID = 1;
 }
 
 message TaskResponse {
@@ -12,7 +12,8 @@ message TaskResponse {
   string description = 3;
   string status = 4;
   string userID = 5;
-  int64 deadline = 6;
+  string listID = 6;
+  int64 deadline = 7;
 }
 
 //User Tasks

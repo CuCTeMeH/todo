@@ -5,14 +5,13 @@ import (
 	"github.com/jinzhu/gorm"
 	"todo/model"
 	"todo/proto"
-	"todo/task"
 	u "todo/user"
 )
 
 type ServiceI interface {
-	ListingResponseFromModel(list *List, tasks []*task.Task) (*proto.ListResponse, error)
-	GetListByID(listID string) (*List, error)
-	GetListsForUser(userID string) ([]*List, error)
+	ListingResponseFromModel(list *model.List, tasks []*model.Task) (*proto.ListResponse, error)
+	GetListByID(listID string) (*model.List, error)
+	GetListsForUser(userID string) ([]*model.List, error)
 }
 
 func NewListService() ServiceI {
@@ -22,7 +21,7 @@ func NewListService() ServiceI {
 type Service struct {
 }
 
-func (s Service) ListingResponseFromModel(list *List, tasks []*task.Task) (*proto.ListResponse, error) {
+func (s Service) ListingResponseFromModel(list *model.List, tasks []*model.Task) (*proto.ListResponse, error) {
 	user := &u.User{}
 	err := model.Client().Model(user).Where("id = ?", list.UserID).First(&user).Error
 
@@ -37,8 +36,8 @@ func (s Service) ListingResponseFromModel(list *List, tasks []*task.Task) (*prot
 	return resp, err
 }
 
-func (s Service) GetListByID(listID string) (*List, error) {
-	list := &List{}
+func (s Service) GetListByID(listID string) (*model.List, error) {
+	list := &model.List{}
 
 	err := model.Client().Model(list).Where("uuid = ?", listID).First(&list).Error
 
@@ -50,7 +49,7 @@ func (s Service) GetListByID(listID string) (*List, error) {
 	return list, err
 }
 
-func (s Service) GetListsForUser(userID string) ([]*List, error) {
+func (s Service) GetListsForUser(userID string) ([]*model.List, error) {
 	user := &u.User{}
 	err := model.Client().Model(user).Where("uuid = ?", userID).First(&user).Error
 	if err != nil {
@@ -58,14 +57,14 @@ func (s Service) GetListsForUser(userID string) ([]*List, error) {
 	}
 
 	uID := user.ID
-	q := model.Client().Model(&List{}).Where("user_id = ?", uID)
+	q := model.Client().Model(&model.List{}).Where("user_id = ?", uID)
 
 	cnt := 0
 	if err = q.Count(&cnt).Error; err != nil {
 		return nil, err
 	}
 
-	lists := []*List{}
+	lists := []*model.List{}
 
 	err = q.Find(&lists).Error
 	if err != nil {

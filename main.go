@@ -30,5 +30,5 @@ func main() {
 }
 
 func AutoMigrate() {
-	model.Client().AutoMigrate(&user.User{}, &list.List{}, &task.Task{})
+	model.Client().AutoMigrate(&user.User{}, &model.List{}, &model.Task{})
 }

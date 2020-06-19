@@ -39,14 +39,14 @@ var _ = Describe("Lists methods", func() {
 		PrepareServer()
 	})
 
-	It("Get List GetList", func() {
+	It("Get List By UUID", func() {
 		ctx := context.Background()
 		conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(BufferDialer), grpc.WithInsecure())
 		defer conn.Close()
 
 		client := proto.NewListServiceClient(conn)
 
-		list := &List{}
+		list := &model.List{}
 		err = model.Client().Model(list).First(&list).Error
 
 		resp, err := client.GetListByID(ctx, &proto.ListRequest{ListID: list.UUID})
@@ -54,7 +54,7 @@ var _ = Describe("Lists methods", func() {
 		Expect(resp.ID).To(BeEquivalentTo(list.UUID))
 	})
 
-	It("Call List GetListsForUser", func() {
+	It("Call Lists By User UUID", func() {
 		ctx := context.Background()
 		conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(BufferDialer), grpc.WithInsecure())
 		defer conn.Close()
@@ -63,9 +63,9 @@ var _ = Describe("Lists methods", func() {
 		user := &u.User{}
 		err = model.Client().Model(user).First(&user).Error
 
-		q := model.Client().Model(&List{}).Where("user_id = ?", user.ID)
+		q := model.Client().Model(&model.List{}).Where("user_id = ?", user.ID)
 
-		lists := []*List{}
+		lists := []*model.List{}
 
 		err = q.Find(&lists).Error
 
