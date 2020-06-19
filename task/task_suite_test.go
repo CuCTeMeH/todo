@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestLists(t *testing.T) {
+func TestTask(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Task Suite")
 }
