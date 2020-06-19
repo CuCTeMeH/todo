@@ -25,16 +25,16 @@ func (s *Server) GetTaskByID(ctx context.Context, in *proto.TaskRequest) (*proto
 }
 
 func (s *Server) GetTasksForList(ctx context.Context, in *proto.ListTasksRequest) (*proto.ListTasksResponse, error) {
-	listService := NewTaskService()
+	taskService := NewTaskService()
 
-	tasks, err := listService.GetTasksForList(in.ListID)
+	tasks, err := taskService.GetTasksForList(in.ListID)
 	if err != nil {
 		return nil, err
 	}
 
 	resp := []*proto.TaskResponse{}
 	for _, task := range tasks {
-		l, err := listService.TaskResponseFromModel(task)
+		l, err := taskService.TaskResponseFromModel(task)
 		if err != nil {
 			return nil, err
 		}
@@ -46,16 +46,16 @@ func (s *Server) GetTasksForList(ctx context.Context, in *proto.ListTasksRequest
 }
 
 func (s *Server) GetTasksForUser(ctx context.Context, in *proto.UserTasksRequest) (*proto.UserTasksResponse, error) {
-	listService := NewTaskService()
+	taskService := NewTaskService()
 
-	tasks, err := listService.GetTasksForUser(in.UserID)
+	tasks, err := taskService.GetTasksForUser(in.UserID)
 	if err != nil {
 		return nil, err
 	}
 
 	resp := []*proto.TaskResponse{}
 	for _, task := range tasks {
-		l, err := listService.TaskResponseFromModel(task)
+		l, err := taskService.TaskResponseFromModel(task)
 		if err != nil {
 			return nil, err
 		}
@@ -64,4 +64,36 @@ func (s *Server) GetTasksForUser(ctx context.Context, in *proto.UserTasksRequest
 	}
 
 	return &proto.UserTasksResponse{Tasks: resp}, nil
+}
+
+func (s *Server) NewTask(ctx context.Context, in *proto.NewTaskRequest) (*proto.TaskResponse, error) {
+	taskService := NewTaskService()
+
+	task, err := taskService.NewTask(in.ListID, in.UserID, in.Name, in.Description, in.Status, in.Deadline)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := taskService.TaskResponseFromModel(task)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+func (s *Server) EditTask(ctx context.Context, in *proto.EditTaskRequest) (*proto.TaskResponse, error) {
+	taskService := NewTaskService()
+
+	task, err := taskService.EditTask(in.TaskID, in.Task.ListID, in.Task.UserID, in.Task.Name, in.Task.Description, in.Task.Status, in.Task.Deadline)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := taskService.TaskResponseFromModel(task)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
 }

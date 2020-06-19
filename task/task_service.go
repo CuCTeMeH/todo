@@ -3,6 +3,7 @@ package task
 import (
 	"errors"
 	"github.com/jinzhu/gorm"
+	"time"
 	"todo/model"
 	"todo/proto"
 )
@@ -12,6 +13,8 @@ type ServiceI interface {
 	GetTaskByID(taskID string) (*model.Task, error)
 	GetTasksForUser(userID string) ([]*model.Task, error)
 	GetTasksForList(listID string) ([]*model.Task, error)
+	NewTask(listID string, userID string, name string, description string, status string, deadline int64) (*model.Task, error)
+	EditTask(taskID string, listID string, userID string, name string, description string, status string, deadline int64) (*model.Task, error)
 }
 
 func NewTaskService() ServiceI {
@@ -107,4 +110,65 @@ func (s Service) GetTasksForList(listID string) ([]*model.Task, error) {
 	}
 
 	return tasks, err
+}
+
+func (s Service) NewTask(listID string, userID string, name string, description string, status string, deadline int64) (*model.Task, error) {
+	uuid := model.UUID()
+
+	user := &model.User{}
+	err := model.Client().Model(user).Where("uuid = ?", userID).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+
+	l := &model.List{}
+	err = model.Client().Model(l).Where("uuid = ?", listID).First(&l).Error
+	if err != nil {
+		return nil, err
+	}
+
+	task := &model.Task{
+		UUID:        uuid,
+		ListID:      l.ID,
+		UserID:      user.ID,
+		Name:        name,
+		Description: description,
+		Deadline:    time.Unix(deadline, 0),
+		Status:      status,
+	}
+
+	err = model.Client().Where(task).FirstOrCreate(&task).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return task, nil
+}
+
+func (s Service) EditTask(taskID string, listID string, userID string, name string, description string, status string, deadline int64) (*model.Task, error) {
+	user := &model.User{}
+	err := model.Client().Model(user).Where("uuid = ?", userID).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+
+	l := &model.List{}
+	err = model.Client().Model(l).Where("uuid = ?", listID).First(&l).Error
+	if err != nil {
+		return nil, err
+	}
+
+	task := &model.Task{}
+	err = model.Client().Model(task).Where("list_id = ?", l.ID).Where("uuid = ?", taskID).First(&task).Error
+	if err != nil {
+		return nil, err
+	}
+
+	task.Name = name
+	task.Description = description
+	task.Status = status
+	task.Deadline = time.Unix(deadline, 0)
+
+	model.Client().Save(&task)
+	return task, nil
 }

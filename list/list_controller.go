@@ -45,10 +45,10 @@ func (s *Server) GetListsForUser(ctx context.Context, in *proto.UserListsRequest
 	return &proto.UserListsResponse{Lists: resp}, nil
 }
 
-func (s *Server) NewListForUser(ctx context.Context, in *proto.NewListRequest) (*proto.ListResponse, error) {
+func (s *Server) NewList(ctx context.Context, in *proto.NewListRequest) (*proto.ListResponse, error) {
 	listService := NewListService()
 
-	list, err := listService.NewListForUser(in.UserID, in.Name, in.Status)
+	list, err := listService.NewList(in.UserID, in.Name, in.Status)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (s *Server) NewListForUser(ctx context.Context, in *proto.NewListRequest) (
 func (s *Server) EditList(ctx context.Context, in *proto.EditListRequest) (*proto.ListResponse, error) {
 	listService := NewListService()
 
-	list, err := listService.EditList(in.ListID, in.UserID, in.Name, in.Status)
+	list, err := listService.EditList(in.ListID, in.List.UserID, in.List.Name, in.List.Status)
 	if err != nil {
 		return nil, err
 	}

@@ -34,8 +34,26 @@ message ListTasksResponse {
   repeated TaskResponse tasks = 1;
 }
 
+//Create Task For List
+message NewTaskRequest {
+  string listID = 1;
+  string userID = 2;
+  string name = 3;
+  string description = 4;
+  string status = 5;
+  int64 deadline = 6;
+}
+
+//Edit Task For List
+message EditTaskRequest {
+  string taskID = 1;
+  NewTaskRequest task = 2;
+}
+
 service taskService {
   rpc GetTaskByID(TaskRequest) returns (TaskResponse) {}
   rpc GetTasksForUser(UserTasksRequest) returns (UserTasksResponse) {}
   rpc GetTasksForList(ListTasksRequest) returns (ListTasksResponse) {}
+  rpc NewTask(NewTaskRequest) returns (TaskResponse) {}
+  rpc EditTask(EditTaskRequest) returns (TaskResponse) {}
 }

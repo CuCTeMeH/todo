@@ -35,14 +35,12 @@ message NewListRequest {
 //Edit List
 message EditListRequest {
   string listID = 1;
-  string userID = 2;
-  string name = 3;
-  string status = 4;
+  NewListRequest list = 2;
 }
 
 service listService {
   rpc GetListByID(ListRequest) returns (ListResponse) {}
   rpc GetListsForUser(UserListsRequest) returns (UserListsResponse) {}
-  rpc NewListForUser(NewListRequest) returns (ListResponse) {}
+  rpc NewList(NewListRequest) returns (ListResponse) {}
   rpc EditList(EditListRequest) returns (ListResponse) {}
 }

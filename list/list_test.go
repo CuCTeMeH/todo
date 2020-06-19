@@ -87,7 +87,7 @@ var _ = Describe("Lists methods", func() {
 		user := &model.User{}
 		err = model.Client().Model(user).First(&user).Error
 
-		resp, err := client.NewListForUser(ctx, &proto.NewListRequest{UserID: user.UUID, Status: "active", Name: "Test Name"})
+		resp, err := client.NewList(ctx, &proto.NewListRequest{UserID: user.UUID, Status: "active", Name: "Test Name"})
 
 		Expect(resp.UserID).To(BeEquivalentTo(user.UUID))
 
@@ -108,14 +108,14 @@ var _ = Describe("Lists methods", func() {
 		list := &model.List{}
 		err = model.Client().Model(list).Where("user_id = ?", user.ID).First(&list).Error
 
-		resp, err := client.EditList(ctx, &proto.EditListRequest{ListID: list.UUID, UserID: user.UUID, Status: "disabled", Name: "Edit Name"})
+		resp, err := client.EditList(ctx, &proto.EditListRequest{ListID: list.UUID, List: &proto.NewListRequest{UserID: user.UUID, Status: "disabled", Name: "Edit Name"}})
 
 		Expect(resp.UserID).To(BeEquivalentTo(user.UUID))
 		Expect(resp.Status).To(BeEquivalentTo("disabled"))
 		Expect(resp.Name).To(BeEquivalentTo("Edit Name"))
 
 		//delete from db after test
-		resp, err = client.EditList(ctx, &proto.EditListRequest{ListID: list.UUID, UserID: user.UUID, Status: list.Status, Name: list.Name})
+		resp, err = client.EditList(ctx, &proto.EditListRequest{ListID: list.UUID, List: &proto.NewListRequest{UserID: user.UUID, Status: list.Status, Name: list.Name}})
 		Expect(err).To(BeNil())
 	})
 

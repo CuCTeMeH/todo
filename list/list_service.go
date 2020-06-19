@@ -12,7 +12,7 @@ type ServiceI interface {
 	ListingResponseFromModel(list *model.List) (*proto.ListResponse, error)
 	GetListByID(listID string) (*model.List, error)
 	GetListsForUser(userID string) ([]*model.List, error)
-	NewListForUser(userID string, name string, status string) (*model.List, error)
+	NewList(userID string, name string, status string) (*model.List, error)
 	EditList(listID string, userID string, name string, status string) (*model.List, error)
 }
 
@@ -89,7 +89,7 @@ func (s Service) GetListsForUser(userID string) ([]*model.List, error) {
 	return lists, err
 }
 
-func (s Service) NewListForUser(userID string, name string, status string) (*model.List, error) {
+func (s Service) NewList(userID string, name string, status string) (*model.List, error) {
 	uuid := model.UUID()
 
 	user := &model.User{}

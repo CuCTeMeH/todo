@@ -8,6 +8,7 @@ import (
 	"google.golang.org/grpc/test/bufconn"
 	"log"
 	"net"
+	"time"
 	"todo/model"
 	"todo/proto"
 )
@@ -100,5 +101,51 @@ var _ = Describe("Task methods", func() {
 		for _, v := range resp.Tasks {
 			Expect(v.ListID).To(BeEquivalentTo(l.UUID))
 		}
+	})
+
+	It("Create Task", func() {
+		ctx := context.Background()
+		conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(BufferDialer), grpc.WithInsecure())
+		defer conn.Close()
+		client := proto.NewTaskServiceClient(conn)
+
+		user := &model.User{}
+		err = model.Client().Model(user).First(&user).Error
+
+		l := &model.List{}
+		err = model.Client().Model(l).Where("user_id = ?", user.ID).First(&l).Error
+
+		resp, err := client.NewTask(ctx, &proto.NewTaskRequest{ListID: l.UUID, UserID: user.UUID, Name: "New task", Description: "New Task Description", Status: "active", Deadline: time.Now().Unix()})
+
+		Expect(resp.UserID).To(BeEquivalentTo(user.UUID))
+
+		//delete from db after test
+		err = model.Client().Model(&model.Task{}).Where("uuid = ?", resp.ID).Unscoped().Delete(&model.Task{}).Error
+		Expect(err).To(BeNil())
+	})
+
+	It("Edit Task", func() {
+		ctx := context.Background()
+		conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(BufferDialer), grpc.WithInsecure())
+		defer conn.Close()
+		client := proto.NewTaskServiceClient(conn)
+
+		user := &model.User{}
+		err = model.Client().Model(user).First(&user).Error
+
+		l := &model.List{}
+		err = model.Client().Model(l).Where("user_id = ?", user.ID).First(&l).Error
+
+		task := &model.Task{}
+		err = model.Client().Model(task).Where("user_id = ?", user.ID).Where("list_id = ?", l.ID).First(&task).Error
+
+		now := time.Now().Unix()
+		resp, err := client.EditTask(ctx, &proto.EditTaskRequest{TaskID: task.UUID, Task: &proto.NewTaskRequest{ListID: l.UUID, UserID: user.UUID, Name: "Edit task", Description: "Edit Task Description", Status: "disabled", Deadline: now}})
+
+		Expect(resp.UserID).To(BeEquivalentTo(user.UUID))
+
+		//delete from db after test
+		resp, err = client.EditTask(ctx, &proto.EditTaskRequest{TaskID: task.UUID, Task: &proto.NewTaskRequest{ListID: l.UUID, UserID: user.UUID, Name: task.Name, Description: task.Description, Status: task.Status, Deadline: task.Deadline.Unix()}})
+		Expect(err).To(BeNil())
 	})
 })
