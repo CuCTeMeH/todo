@@ -3,7 +3,6 @@ package task
 import (
 	"context"
 	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/test/bufconn"
 	"log"
@@ -23,7 +22,7 @@ func PrepareServer() {
 	lis = bufconn.Listen(bufSize)
 	grpcServer := grpc.NewServer()
 	s := Server{}
-	proto.RegisterListServiceServer(grpcServer, &s)
+	proto.RegisterTaskServiceServer(grpcServer, &s)
 
 	go func() {
 		if err := grpcServer.Serve(lis); err != nil {

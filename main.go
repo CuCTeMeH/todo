@@ -19,8 +19,10 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer()
-	s := list.Server{}
-	proto.RegisterListServiceServer(grpcServer, &s)
+	l := list.Server{}
+	t := task.Server{}
+	proto.RegisterListServiceServer(grpcServer, &l)
+	proto.RegisterTaskServiceServer(grpcServer, &t)
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %s", err)

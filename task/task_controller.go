@@ -9,8 +9,14 @@ import (
 type Server struct {
 }
 
-func (s *Server) getTask(ctx context.Context, in *proto.TaskRequest) (*proto.TaskResponse, error) {
-	log.Printf("Get Todo list with uuid: %s", in.GetUuid())
+func (s *Server) GetTaskByID(ctx context.Context, in *proto.TaskRequest) (*proto.TaskResponse, error) {
+	//taskService := NewTaskService()
+	//
+	//task, err := taskService.GetTaskByID()
+	//if err != nil {
+	//	return nil, err
+	//}
+
 	return &proto.TaskResponse{Name: "", Status: ""}, nil
 }
 

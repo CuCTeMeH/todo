@@ -9,20 +9,20 @@ import (
 	u "todo/user"
 )
 
-type ListServiceI interface {
+type ServiceI interface {
 	ListingResponseFromModel(list *List, tasks []*task.Task) (*proto.ListResponse, error)
 	GetListByID(listID string) (*List, error)
 	GetListsForUser(userID string) ([]*List, error)
 }
 
-func NewListService() ListServiceI {
-	return &ListService{}
+func NewListService() ServiceI {
+	return &Service{}
 }
 
-type ListService struct {
+type Service struct {
 }
 
-func (s ListService) ListingResponseFromModel(list *List, tasks []*task.Task) (*proto.ListResponse, error) {
+func (s Service) ListingResponseFromModel(list *List, tasks []*task.Task) (*proto.ListResponse, error) {
 	user := &u.User{}
 	err := model.Client().Model(user).Where("id = ?", list.UserID).First(&user).Error
 
@@ -37,7 +37,7 @@ func (s ListService) ListingResponseFromModel(list *List, tasks []*task.Task) (*
 	return resp, err
 }
 
-func (s ListService) GetListByID(listID string) (*List, error) {
+func (s Service) GetListByID(listID string) (*List, error) {
 	list := &List{}
 
 	err := model.Client().Model(list).Where("uuid = ?", listID).First(&list).Error
@@ -50,7 +50,7 @@ func (s ListService) GetListByID(listID string) (*List, error) {
 	return list, err
 }
 
-func (s ListService) GetListsForUser(userID string) ([]*List, error) {
+func (s Service) GetListsForUser(userID string) ([]*List, error) {
 	user := &u.User{}
 	err := model.Client().Model(user).Where("uuid = ?", userID).First(&user).Error
 	if err != nil {
