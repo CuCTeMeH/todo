@@ -19,9 +19,11 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer()
+
 	l := list.Server{}
 	t := task.Server{}
 	u := user.Server{}
+
 	proto.RegisterListServiceServer(grpcServer, &l)
 	proto.RegisterTaskServiceServer(grpcServer, &t)
 	proto.RegisterUserServicesServer(grpcServer, &u)
