@@ -7,3 +7,6 @@ import (
 func UUID() string {
 	return uuid.New().String()
 }
+func AutoMigrate() {
+	Client().AutoMigrate(&User{}, &List{}, &Task{})
+}

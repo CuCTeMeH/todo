@@ -9,6 +9,7 @@ import (
 	"log"
 	"net"
 	"time"
+	"todo/config"
 	"todo/model"
 	"todo/proto"
 )
@@ -22,6 +23,7 @@ func BufferDialer(context.Context, string) (net.Conn, error) {
 }
 
 func PrepareServer() {
+	config.InitConfig()
 	lis = bufconn.Listen(bufSize)
 	grpcServer := grpc.NewServer()
 	s := Server{}
