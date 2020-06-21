@@ -5,14 +5,12 @@ import (
 	"log"
 	"net"
 	"todo/list"
-	"todo/model"
 	"todo/proto"
 	"todo/task"
 	"todo/user"
 )
 
 func main() {
-	AutoMigrate()
 	lis, err := net.Listen("tcp", ":9000")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
@@ -31,8 +29,4 @@ func main() {
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %s", err)
 	}
-}
-
-func AutoMigrate() {
-	model.Client().AutoMigrate(&model.User{}, &model.List{}, &model.Task{})
 }
