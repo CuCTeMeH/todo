@@ -7,13 +7,14 @@ import (
 // Job represents a single entity that should be processed.
 // For example a struct that should be saved to database
 type Job struct {
-	ID        int
-	Name      string
-	Run       func() error
-	Interval  time.Duration
-	Error     error
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID          int
+	Name        string
+	Run         func() error
+	Interval    time.Duration
+	IsRecurring bool
+	Error       error
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 type JobChannel chan Job
@@ -51,7 +52,7 @@ func (wr *Worker) Start() {
 					return
 				}
 
-				if job.Interval != 0 {
+				if job.IsRecurring == true {
 					go time.AfterFunc(job.Interval*time.Second, func() {
 						DispatcherInstance.Submit(job)
 					})

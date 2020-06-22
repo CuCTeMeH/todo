@@ -22,10 +22,11 @@ func main() {
 
 	pool.InitDispatcher()
 	pool.DispatcherInstance.Submit(pool.Job{
-		ID:       1,
-		Name:     "Check Deadline",
-		Run:      task.NewTaskService().CheckDeadline,
-		Interval: time.Duration(60),
+		ID:          1,
+		Name:        "Check Deadline",
+		Run:         task.NewTaskService().CheckDeadline,
+		Interval:    time.Duration(60),
+		IsRecurring: true,
 	})
 
 	lis, err := net.Listen("tcp", ":9000")
