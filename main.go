@@ -24,7 +24,7 @@ func main() {
 	pool.DispatcherInstance.Submit(pool.Job{
 		ID:       1,
 		Name:     "Check Deadline",
-		Run:      task.CheckDeadline,
+		Run:      task.NewTaskService().CheckDeadline,
 		Interval: time.Duration(60),
 	})
 

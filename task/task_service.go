@@ -16,6 +16,7 @@ type ServiceI interface {
 	GetTasksForList(listID string) ([]*model.Task, error)
 	NewTask(listID string, userID string, name string, description string, status string, deadline int64) (*model.Task, error)
 	EditTask(taskID string, listID string, userID string, name string, description string, status string, deadline int64) (*model.Task, error)
+	CheckDeadline() error
 }
 
 func NewTaskService() ServiceI {
@@ -170,17 +171,31 @@ func (s Service) EditTask(taskID string, listID string, userID string, name stri
 	task.Status = status
 	task.Deadline = time.Unix(deadline, 0)
 
-	model.Client().Save(&task)
+	err = model.Client().Save(&task).Error
+	if err != nil {
+		return nil, err
+	}
+
 	return task, nil
 }
 
-func CheckDeadline() error {
+func (s Service) CheckDeadline() error {
 	tasks := []*model.Task{}
-	err := model.Client().Model(tasks).Where("deadline <= ?", time.Now()).Find(&tasks).Error
+	err := model.Client().Model(tasks).Where("deadline <= ?", time.Now()).Where("status != ?", "disabled").Find(&tasks).Error
 	if err != nil {
 		return err
 	}
 
-	fmt.Println("CHECK DEADLINE!!!")
+	for _, task := range tasks {
+		if task.Deadline.Before(time.Now()) {
+			task.Status = "disabled"
+			fmt.Println(task)
+			err := model.Client().Save(&task).Error
+			if err != nil {
+				return err
+			}
+		}
+	}
+
 	return nil
 }

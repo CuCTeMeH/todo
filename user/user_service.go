@@ -91,7 +91,11 @@ func (s Service) EditUser(userID string, username string, email string, firstNam
 	user.FirstName = firstName
 	user.LastName = lastName
 
-	model.Client().Save(&user)
+	err = model.Client().Save(&user).Error
+	if err != nil {
+		return nil, err
+	}
+
 	return user, nil
 
 }

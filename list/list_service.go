@@ -129,7 +129,10 @@ func (s Service) EditList(listID string, userID string, name string, status stri
 	list.Name = name
 	list.Status = status
 
-	model.Client().Save(&list)
+	err = model.Client().Save(&list).Error
+	if err != nil {
+		return nil, err
+	}
 
 	return list, nil
 }
