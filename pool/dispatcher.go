@@ -1,0 +1,66 @@
+package pool
+
+import (
+	"runtime"
+)
+
+// New returns a new dispatcher. A Dispatcher communicates between the client
+// and the worker. Its main job is to receive a job and share it on the WorkPool
+// WorkPool is the link between the dispatcher and all the workers as
+// the WorkPool of the dispatcher is common JobPool for all the workers
+func NewWorker(num int) *Dispatcher {
+	return &Dispatcher{
+		Workers:  make([]*Worker, num),
+		WorkChan: make(JobChannel),
+		Queue:    make(JobQueue),
+	}
+}
+
+// disp is the link between the client and the workers
+type Dispatcher struct {
+	Workers  []*Worker  // this is the list of workers that dispatcher tracks
+	WorkChan JobChannel // client submits job to this channel
+	Queue    JobQueue   // this is the shared JobPool between the workers
+}
+
+var DispatcherInstance *Dispatcher
+
+// Start creates pool of num count of workers.
+func (d *Dispatcher) Start() *Dispatcher {
+	l := len(d.Workers)
+	for i := 1; i <= l; i++ {
+		wrk := NewJob(i, make(JobChannel), d.Queue, make(chan struct{}))
+		wrk.Start()
+		d.Workers = append(d.Workers, wrk)
+	}
+	go d.process()
+	return d
+}
+
+// process listens to a job submitted on WorkChan and
+// relays it to the WorkPool. The WorkPool is shared between
+// the workers.
+func (d *Dispatcher) process() {
+	for {
+		select {
+		case job := <-d.WorkChan: // listen to any submitted job on the WorkChan
+			// wait for a worker to submit JobChan to Queue
+			// note that this Queue is shared among all workers.
+			// Whenever there is an available JobChan on Queue pull it
+			jobChan := <-d.Queue
+
+			// Once a jobChan is available, send the submitted Job on this JobChan
+			jobChan <- job
+		}
+	}
+}
+
+func (d *Dispatcher) Submit(job Job) {
+	d.WorkChan <- job
+}
+
+func InitDispatcher() {
+	buff := runtime.NumCPU() / 2
+	d := NewWorker(buff).Start()
+	DispatcherInstance = d
+}

@@ -2,6 +2,7 @@ package task
 
 import (
 	"errors"
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"time"
 	"todo/model"
@@ -171,4 +172,15 @@ func (s Service) EditTask(taskID string, listID string, userID string, name stri
 
 	model.Client().Save(&task)
 	return task, nil
+}
+
+func CheckDeadline() error {
+	tasks := []*model.Task{}
+	err := model.Client().Model(tasks).Where("deadline <= ?", time.Now()).Find(&tasks).Error
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("CHECK DEADLINE!!!")
+	return nil
 }

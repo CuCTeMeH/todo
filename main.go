@@ -4,9 +4,11 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"time"
 	"todo/config"
 	"todo/list"
 	"todo/model"
+	"todo/pool"
 	"todo/proto"
 	"todo/task"
 	"todo/user"
@@ -17,6 +19,14 @@ func main() {
 	if config.Settings.GetBool("AUTO_MIGRATE") == true {
 		model.AutoMigrate()
 	}
+
+	pool.InitDispatcher()
+	pool.DispatcherInstance.Submit(pool.Job{
+		ID:       1,
+		Name:     "Check Deadline",
+		Run:      task.CheckDeadline,
+		Interval: time.Duration(60),
+	})
 
 	lis, err := net.Listen("tcp", ":9000")
 	if err != nil {
