@@ -25,7 +25,7 @@ func main() {
 		ID:          1,
 		Name:        "Check Deadline",
 		Run:         task.NewTaskService().CheckDeadline,
-		Interval:    time.Duration(60),
+		Interval:    time.Duration(60) * time.Second,
 		IsRecurring: true,
 	})
 

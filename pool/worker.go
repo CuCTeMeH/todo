@@ -1,6 +1,7 @@
 package pool
 
 import (
+	"log"
 	"time"
 )
 
@@ -49,11 +50,11 @@ func (wr *Worker) Start() {
 				// when a job is received, process
 				err := job.Run()
 				if err != nil {
-					return
+					log.Println(err)
 				}
 
-				if job.IsRecurring == true {
-					go time.AfterFunc(job.Interval*time.Second, func() {
+				if job.IsRecurring == true && err == nil {
+					go time.AfterFunc(job.Interval, func() {
 						DispatcherInstance.Submit(job)
 					})
 				}
